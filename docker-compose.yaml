@@ -1,0 +1,35 @@
+services:
+
+  app:
+    container_name: api-solid
+    build: .
+    command: tail -f /dev/null
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+
+  postgres:
+    container_name: pg-solid
+    image: bitnami/postgresql:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: solid
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/bitnami/postgresql
+    networks:
+      - app-network
+  
+networks:
+  app-network:
+    driver: bridge
+  
+volumes:
+  postgres_data:
